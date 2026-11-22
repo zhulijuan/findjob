@@ -1,11 +1,13 @@
-from jinja2 import Template
+from __future__ import annotations
+
+from jinja2 import StrictUndefined, Template
 
 from .config import AppConfig, TaskConfig
 from .llm import LLMClient
 
 
 def render(template: str, variables: dict | None = None) -> str:
-    return Template(template).render(**(variables or {}))
+    return Template(template, undefined=StrictUndefined).render(**(variables or {}))
 
 
 def build_messages(task: TaskConfig, variables: dict | None = None) -> list[dict]:
@@ -36,4 +38,5 @@ def run_task(
         max_tokens=task.max_tokens if task.max_tokens is not None else config.llm.max_tokens,
         thinking=task.thinking,
         stream=stream,
+        meta={"task": task_name, **(variables or {})},
     )

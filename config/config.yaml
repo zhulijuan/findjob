@@ -1,11 +1,23 @@
 llm:
   base_url: https://api.deepseek.com
+  api_key_env: DEEPSEEK_API_KEY
   model: deepseek-flash
   temperature: 1.0
   max_tokens: 2048
   timeout: 60
+  usage_log: logs/usage.jsonl
+
+  # 切换 Qwen（DashScope）示例，兼容 OpenAI 格式：
+  # base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  # api_key_env: DASHSCOPE_API_KEY
+  # model: qwen-plus
 
 tasks:
+  qa:
+    description: 即问即答（配合 --ask 使用，可在此配置固定 system prompt）
+    system_prompt: ""
+    user_prompt: "{{ question }}"
+
   intro:
     description: 介绍类任务（演示模板变量）
     system_prompt: 你是一个简洁的助手

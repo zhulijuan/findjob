@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Optional, Union
 
 import yaml
 from dotenv import load_dotenv
@@ -11,9 +12,11 @@ class LLMConfig(BaseModel):
 
     base_url: str
     model: str
+    api_key_env: str = "DEEPSEEK_API_KEY"
     temperature: float = Field(ge=0, le=2)
     max_tokens: int = Field(gt=0)
     timeout: float = Field(gt=0)
+    usage_log: Optional[str] = None
 
 
 class TaskConfig(BaseModel):
@@ -22,10 +25,10 @@ class TaskConfig(BaseModel):
     description: str = ""
     system_prompt: str = ""
     user_prompt: str
-    model: str | None = None
+    model: Optional[str] = None
     thinking: bool = False
-    temperature: float | None = Field(default=None, ge=0, le=2)
-    max_tokens: int | None = Field(default=None, gt=0)
+    temperature: Optional[float] = Field(default=None, ge=0, le=2)
+    max_tokens: Optional[int] = Field(default=None, gt=0)
 
 
 class AppConfig(BaseModel):
@@ -40,7 +43,7 @@ class AppConfig(BaseModel):
         return "\n".join(lines)
 
 
-def load_config(path: str | Path = "config/config.yaml") -> AppConfig:
+def load_config(path: Union[str, Path] = "config/config.yaml") -> AppConfig:
     load_dotenv()
     path = Path(path)
     if not path.exists():
