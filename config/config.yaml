@@ -1,0 +1,22 @@
+llm:
+  base_url: https://api.deepseek.com
+  model: deepseek-flash
+  temperature: 1.0
+  max_tokens: 2048
+  timeout: 60
+
+tasks:
+  intro:
+    description: 介绍类任务（演示模板变量）
+    system_prompt: 你是一个简洁的助手
+    user_prompt: 用一句话介绍 {{ topic }}。
+
+  count:
+    description: 数数任务（演示变量渲染）
+    user_prompt: 从 1 数到 {{ n }}，用顿号分隔。
+
+  reasoning:
+    description: 推理任务（演示 thinking 与任务级模型覆盖）
+    model: deepseek-v4-pro
+    thinking: true
+    user_prompt: 9.11 和 9.9 哪个大？给出理由。
