@@ -12,11 +12,39 @@ llm:
   # api_key_env: DASHSCOPE_API_KEY
   # model: qwen-plus
 
+embedding:
+  base_url: https://api.siliconflow.cn/v1
+  api_key_env: SILICONFLOW_API_KEY
+  model: BAAI/bge-m3
+  batch_size: 16
+  timeout: 60
+  usage_log: logs/usage.jsonl
+
+vectorstore:
+  type: faiss
+  index_path: data/index/credit_policy
+
+rag:
+  corpus_dir: data/corpus
+  chunk_size: 400
+  chunk_overlap: 50
+  top_k: 5
+
 tasks:
   qa:
     description: 即问即答（配合 --ask 使用，可在此配置固定 system prompt）
     system_prompt: ""
     user_prompt: "{{ question }}"
+
+  rag:
+    description: 基于信贷知识库问答（配合 --rag 使用）
+    temperature: 0.1
+    system_prompt: 你是信贷政策助手。仅依据提供的资料回答问题；资料中没有的内容明确说"资料中未提及"，不得编造；回答末尾列出引用的来源编号。
+    user_prompt: |
+      资料：
+      {{ context }}
+
+      问题：{{ question }}
 
   intro:
     description: 介绍类任务（演示模板变量）

@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Optional, Union
+from typing import Literal, Optional, Union
 
 import yaml
 from dotenv import load_dotenv
@@ -31,9 +31,39 @@ class TaskConfig(BaseModel):
     max_tokens: Optional[int] = Field(default=None, gt=0)
 
 
+class EmbeddingConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    base_url: str
+    model: str
+    api_key_env: str
+    batch_size: int = Field(default=16, gt=0)
+    timeout: float = Field(gt=0)
+    usage_log: Optional[str] = None
+
+
+class VectorStoreConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    type: Literal["faiss"]
+    index_path: str
+
+
+class RagConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    corpus_dir: str
+    chunk_size: int = Field(gt=0)
+    chunk_overlap: int = Field(ge=0)
+    top_k: int = Field(gt=0)
+
+
 class AppConfig(BaseModel):
     llm: LLMConfig
     tasks: dict[str, TaskConfig]
+    embedding: Optional[EmbeddingConfig] = None
+    vectorstore: Optional[VectorStoreConfig] = None
+    rag: Optional[RagConfig] = None
 
     def list_tasks(self) -> str:
         lines = []
