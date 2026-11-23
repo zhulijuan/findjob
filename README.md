@@ -2,7 +2,7 @@
 
 配置驱动的 LLM 任务执行框架（Python）。所有模型参数、Prompt 模板、任务定义均外置于配置文件，代码零业务参数——新增任务只改 YAML，不改代码。
 
-> 当前进度：W1 最小问答 demo ✅ → W2 RAG 信贷政策知识库 v1（进行中）→ 后续按 [docs/harness-plan.md](docs/harness-plan.md) 路线图迭代（Agent → 评测体系）。
+> 当前进度：W1 最小问答 demo ✅ → W2 RAG 信贷政策知识库 v1 ✅ → W3 检索评测（混合检索 / reranker / recall@k）→ 后续按 [docs/harness-plan.md](docs/harness-plan.md) 路线图迭代（Agent → 评测体系）。
 
 ## 功能特性
 
