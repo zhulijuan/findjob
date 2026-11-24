@@ -72,7 +72,6 @@ tasks:
 
 ```jsonl
 {"id": 1, "type": "fact", "question": "单户用于消费的个人信用贷款授信额度上限是多少？", "gold_chunk_ids": ["商业银行互联网贷款管理暂行办法.md#n"], "note": "第六条"}
-
 {"id": 21, "type": "out_of_corpus", "question": "如何计算 LPR 利率？", "gold_chunk_ids": [], "note": "语料外，验证拒答"}
 ```
 
