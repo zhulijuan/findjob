@@ -1,4 +1,5 @@
 import argparse
+from pathlib import Path
 
 from harness.config import load_config
 from harness.runner import run_task
@@ -21,13 +22,17 @@ def main():
     parser.add_argument("--ask", help="直接向大模型提问，走配置中的 qa 任务")
     parser.add_argument("--rag", help="基于信贷知识库问答（需先 --build-index）")
     parser.add_argument("--build-index", action="store_true", help="从语料目录重建向量索引")
+    parser.add_argument(
+        "--eval", nargs="?", const="data/eval/retrieval_testset.jsonl", metavar="TESTSET",
+        help="跑检索对比评测（4 配置 × recall/MRR），默认测试集 data/eval/retrieval_testset.jsonl",
+    )
     parser.add_argument("--var", action="append", default=[], metavar="KEY=VALUE", help="Prompt 模板变量，可重复传入")
     parser.add_argument("--stream", action="store_true", help="流式输出")
     parser.add_argument("--list", action="store_true", help="列出所有任务")
     args = parser.parse_args()
 
-    if sum(bool(x) for x in (args.ask, args.task, args.rag, args.build_index)) > 1:
-        parser.error("--ask/--task/--rag/--build-index 一次只能用一个")
+    if sum(bool(x) for x in (args.ask, args.task, args.rag, args.build_index, args.eval)) > 1:
+        parser.error("--ask/--task/--rag/--build-index/--eval 一次只能用一个")
 
     config = load_config(args.config)
 
@@ -35,6 +40,14 @@ def main():
         from harness.rag import build_index
 
         print(f"索引构建完成，共 {build_index(config)} 块")
+        return
+
+    if args.eval is not None:
+        from harness.eval import evaluate
+
+        result = evaluate(config, args.eval)
+        print(Path(result["markdown"]).read_text(encoding="utf-8"))
+        print(f"明细: {result['jsonl']}")
         return
 
     if args.list or (not args.task and not args.ask and not args.rag):

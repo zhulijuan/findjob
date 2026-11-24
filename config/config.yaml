@@ -30,10 +30,31 @@ rag:
   chunk_overlap: 50
   top_k: 5
 
+retrieval:
+  mode: hybrid              # vector | bm25 | hybrid
+  bm25_candidates: 10       # BM25 路送融合的候选数
+  vector_candidates: 10     # 向量路送融合的候选数
+  rrf_k: 60                 # RRF 常数（惯例 60）
+  rerank:
+    enabled: false
+    base_url: https://api.siliconflow.cn/v1
+    api_key_env: SILICONFLOW_API_KEY
+    model: BAAI/bge-reranker-v2-m3
+    top_m: 10
+  rewrite:
+    enabled: false
+  jieba_userdict: data/eval/userdict.txt
+
 tasks:
   qa:
     description: 即问即答（配合 --ask 使用，可在此配置固定 system prompt）
     system_prompt: ""
+    user_prompt: "{{ question }}"
+
+  rewrite:
+    description: 查询改写（配合 retrieval.rewrite.enabled 使用）
+    temperature: 0.0
+    system_prompt: 将用户的口语化信贷问题改写为适合检索的书面表述，补充同义词与关键术语，只输出改写后的查询，不要回答。
     user_prompt: "{{ question }}"
 
   rag:

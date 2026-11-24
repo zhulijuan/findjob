@@ -58,12 +58,41 @@ class RagConfig(BaseModel):
     top_k: int = Field(gt=0)
 
 
+class RerankConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    enabled: bool = False
+    base_url: str
+    api_key_env: str
+    model: str
+    top_m: int = Field(default=10, gt=0)
+
+
+class RewriteConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    enabled: bool = False
+
+
+class RetrievalConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    mode: Literal["vector", "bm25", "hybrid"] = "hybrid"
+    bm25_candidates: int = Field(default=10, gt=0)
+    vector_candidates: int = Field(default=10, gt=0)
+    rrf_k: int = Field(default=60, gt=0)
+    rerank: RerankConfig
+    rewrite: RewriteConfig
+    jieba_userdict: Optional[str] = None
+
+
 class AppConfig(BaseModel):
     llm: LLMConfig
     tasks: dict[str, TaskConfig]
     embedding: Optional[EmbeddingConfig] = None
     vectorstore: Optional[VectorStoreConfig] = None
     rag: Optional[RagConfig] = None
+    retrieval: Optional[RetrievalConfig] = None
 
     def list_tasks(self) -> str:
         lines = []

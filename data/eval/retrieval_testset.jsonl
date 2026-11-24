@@ -1,0 +1,20 @@
+{"id": 1, "type": "fact", "question": "单户用于消费的个人信用贷款授信额度上限是多少？", "gold_chunk_ids": ["商业银行互联网贷款管理暂行办法.md#7"], "gold_key_phrases": ["不超过人民币20万元"], "note": "监管第六条"}
+{"id": 2, "type": "fact", "question": "互联网贷款资金禁止用于哪些用途？", "gold_chunk_ids": ["商业银行互联网贷款管理暂行办法.md#26"], "gold_key_phrases": ["购房及偿还住房抵押贷款"], "note": "监管第二十四条"}
+{"id": 3, "type": "fact", "question": "授信与首笔贷款发放时间间隔超过1个月有什么要求？", "gold_chunk_ids": ["商业银行互联网贷款管理暂行办法.md#28"], "gold_key_phrases": ["再评估"], "note": "监管第二十六条"}
+{"id": 4, "type": "fact", "question": "对风险模型自动审批的补充机制是什么？", "gold_chunk_ids": ["商业银行互联网贷款管理暂行办法.md#24"], "gold_key_phrases": ["人工复核验证机制"], "note": "监管第二十二条"}
+{"id": 5, "type": "fact", "question": "首次开展互联网贷款业务应何时提交书面报告？", "gold_chunk_ids": ["商业银行互联网贷款管理暂行办法.md#64"], "gold_key_phrases": ["产品上线后10个工作日内"], "note": "监管第五十八条"}
+{"id": 6, "type": "fact", "question": "惠享贷的年化利率区间是多少？", "gold_chunk_ids": ["某某银行个人消费贷款产品说明书.md#1"], "gold_key_phrases": ["18.00%"], "note": "产品说明书-产品要素"}
+{"id": 7, "type": "fact", "question": "微企贷的授信额度如何测算？", "gold_chunk_ids": ["某某银行小微企业经营贷款准入政策.md#9"], "gold_key_phrases": ["税前年开票额的 15%"], "note": "准入政策-额度与定价"}
+{"id": 8, "type": "fact", "question": "微企贷优先支持哪些行业？", "gold_chunk_ids": ["某某银行小微企业经营贷款准入政策.md#8"], "gold_key_phrases": ["优先支持行业"], "note": "准入政策-行业准入"}
+{"id": 9, "type": "口径", "question": "FPD30 指标的口径是什么？", "gold_chunk_ids": ["某某银行信贷政策口径问答.md#1"], "gold_key_phrases": ["FPD30 指首期还款日"], "note": "口径问答-指标口径类"}
+{"id": 10, "type": "口径", "question": "通过率的口径是什么？", "gold_chunk_ids": ["某某银行信贷政策口径问答.md#1"], "gold_key_phrases": ["审批通过的申请件数"], "note": "口径问答-指标口径类"}
+{"id": 11, "type": "口径", "question": "渠道归属怎么判定？", "gold_chunk_ids": ["某某银行信贷政策口径问答.md#1"], "gold_key_phrases": ["渠道编码"], "note": "口径问答-指标口径类"}
+{"id": 12, "type": "口径", "question": "收入负债比超标的客户能否人工特批？", "gold_chunk_ids": ["某某银行信贷政策口径问答.md#2"], "gold_key_phrases": ["联签特批"], "note": "口径问答-政策执行类"}
+{"id": 13, "type": "口径", "question": "什么情况下触发额度冻结？", "gold_chunk_ids": ["某某银行信贷政策口径问答.md#3"], "gold_key_phrases": ["自动冻结额度"], "note": "口径问答-风险监控类"}
+{"id": 14, "type": "口径", "question": "vintage 曲线如何用于准入策略评估？", "gold_chunk_ids": ["某某银行信贷政策口径问答.md#3"], "gold_key_phrases": ["vintage 曲线"], "note": "口径问答-风险监控类"}
+{"id": 15, "type": "多跳", "question": "惠享贷的最高授信额度是否符合监管对消费信用贷款的额度上限要求？", "gold_chunk_ids": ["商业银行互联网贷款管理暂行办法.md#7", "某某银行个人消费贷款产品说明书.md#1"], "gold_key_phrases": ["不超过人民币20万元", "200,000 元"], "note": "监管第六条+产品要素"}
+{"id": 16, "type": "多跳", "question": "征信有当前逾期的客户能否申请惠享贷？监管对查询征信信息有什么要求？", "gold_chunk_ids": ["商业银行互联网贷款管理暂行办法.md#22", "某某银行个人消费贷款产品说明书.md#5", "某某银行小微企业经营贷款准入政策.md#6"], "gold_key_phrases": ["无当前逾期", "查询借款人的征信信息"], "note": "产品准入+监管第二十条"}
+{"id": 17, "type": "多跳", "question": "微企贷 FPD30 监控红线是多少？监管要求对风险模型做哪些日常监测？", "gold_chunk_ids": ["商业银行互联网贷款管理暂行办法.md#43", "某某银行小微企业经营贷款准入政策.md#14"], "gold_key_phrases": ["0.8%", "风险模型日常监测"], "note": "准入政策贷后+监管第四十条"}
+{"id": 18, "type": "语料外", "question": "如何计算 LPR 利率？", "gold_chunk_ids": [], "gold_key_phrases": [], "note": "语料外，验证拒答"}
+{"id": 19, "type": "语料外", "question": "个人所得税专项附加扣除有哪些？", "gold_chunk_ids": [], "gold_key_phrases": [], "note": "语料外，验证拒答"}
+{"id": 20, "type": "语料外", "question": "如何用 Python 实现快速排序？", "gold_chunk_ids": [], "gold_key_phrases": [], "note": "语料外，验证拒答"}

@@ -2,7 +2,7 @@
 
 配置驱动的 LLM 任务执行框架（Python）。所有模型参数、Prompt 模板、任务定义均外置于配置文件，代码零业务参数——新增任务只改 YAML，不改代码。
 
-> 当前进度：W1 最小问答 demo ✅ → W2 RAG 信贷政策知识库 v1 ✅ → W3 检索评测（混合检索 / reranker / recall@k）→ 后续按 [docs/harness-plan.md](docs/harness-plan.md) 路线图迭代（Agent → 评测体系）。
+> 当前进度：W1 最小问答 demo ✅ → W2 RAG 信贷政策知识库 v1 ✅ → W3 混合检索 + 评测体系 ✅ → W4 产品化封装 → 后续按 [docs/harness-plan.md](docs/harness-plan.md) 路线图迭代（Agent → 归因评测体系）。
 
 ## 功能特性
 
@@ -14,6 +14,7 @@
 - **用量记录**：每次调用自动落盘 token 用量 / 耗时 / 任务名（`logs/usage.jsonl`），LLM 与 embedding 调用均记录
 - **环境变量覆盖**：`DEEPSEEK_MODEL`、`DEEPSEEK_BASE_URL` 等环境变量优先于配置文件，便于临时切换
 - **RAG 知识库**（W2）：中文条款感知分块 → BGE-M3 向量化 → FAISS 检索 → 带引用来源的问答
+- **混合检索 + 评测**（W3）：BM25+向量双路召回、RRF 融合、可选 reranker/查询改写；20 条标注测试集一键评测（recall@k / MRR），对比报告落盘
 
 ## 目录结构
 
@@ -26,8 +27,13 @@ findjob/
 │   ├── embedding.py        # Embedding 客户端（批量，BGE-M3）
 │   ├── chunker.py          # 中文条款感知分块（章/条/标题行切分 + 句级 overlap）
 │   ├── vectorstore.py      # 向量库抽象 + FAISS 实现（归一化内积 ≡ 余弦）
-│   ├── retriever.py        # 检索管线（查询向量化 → top_k）
+│   ├── bm25.py             # BM25 稀疏检索索引（jieba 分词 + 自定义词典）
+│   ├── fusion.py           # RRF 倒数排名融合
+│   ├── reranker.py         # Cross-encoder 精排客户端（bge-reranker-v2-m3）
+│   ├── rewrite.py          # LLM 查询改写（开关默认关）
+│   ├── retriever.py        # 检索编排：改写 → 双路召回 → 融合 → 精排
 │   ├── rag.py              # 建索引 + context 拼装 + RAG 问答
+│   ├── eval.py             # 检索评测 runner（recall@k / MRR 多配置对比）
 │   └── runner.py           # 任务运行器（模板渲染 + 消息构建）
 ├── main.py                 # 命令行入口
 ├── data/corpus/            # 语料：公开监管文件 + 合成文档（入库）
@@ -54,9 +60,12 @@ cp .env.example .env
 .venv/bin/python main.py --task intro --var topic=DeepSeek   # 运行配置中的任务
 
 # 4. RAG 知识库问答
-.venv/bin/python main.py --build-index                       # 语料 → 分块 → 向量化 → 索引
-.venv/bin/python main.py --rag "互联网贷款单户授信额度上限是多少？"  # 带引用来源的问答
+.venv/bin/python main.py --build-index                       # 语料 → 分块 → 向量化 → FAISS+BM25 双索引
+.venv/bin/python main.py --rag "互联网贷款单户授信额度上限是多少？"  # 带引用来源的问答（hybrid 模式）
 .venv/bin/python main.py --rag "FPD30 怎么定义" --stream     # 流式输出
+
+# 5. 检索效果评测（4 配置对比，产出 recall/MRR 报告）
+.venv/bin/python main.py --eval                              # 默认测试集 data/eval/retrieval_testset.jsonl
 ```
 
 ## RAG 工作原理
@@ -122,6 +131,7 @@ tasks:
 见 [docs/harness-plan.md](docs/harness-plan.md)：
 
 - ✅ W2：RAG 信贷政策知识库 v1（分块 / BGE-M3 / FAISS / 带引用问答）
-- W3：混合检索（BM25+向量）、bge-reranker、20 条标注测试集 + recall@k 评测落盘
+- ✅ W3：混合检索（BM25+向量 RRF 融合）、bge-reranker 精排、查询改写、20 条标注测试集评测（recall@k / MRR 对比记录）
+- W4：Streamlit/FastAPI 界面与服务化 → 项目 1 完整版可演示（里程碑 1）
 - W5–W7：Agent 工具注册、结构化输出、规则+模型双引擎
 - W9–W11：指标异常归因 Agent + 评测体系（批量跑批 / LLM-as-judge / 结果落盘）

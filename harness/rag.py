@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from .bm25 import BM25Index
 from .chunker import split_document
 from .config import AppConfig
 from .embedding import EmbeddingClient
@@ -35,6 +36,10 @@ def build_index(config: AppConfig) -> int:
     store = FaissStore(dim=vectors.shape[1])
     store.add(vectors, all_chunks)
     store.save(config.vectorstore.index_path)
+
+    userdict_path = config.retrieval.jieba_userdict if config.retrieval else None
+    bm25 = BM25Index.build(all_chunks, userdict_path=userdict_path)
+    bm25.save(config.vectorstore.index_path)
     return len(all_chunks)
 
 
