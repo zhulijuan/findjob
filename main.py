@@ -26,6 +26,7 @@ def main():
         "--eval", nargs="?", const="data/eval/retrieval_testset.jsonl", metavar="TESTSET",
         help="跑检索对比评测（4 配置 × recall/MRR），默认测试集 data/eval/retrieval_testset.jsonl",
     )
+    parser.add_argument("--note", help="本次评测变更备注（配合 --eval 使用，写进报告的变更说明）")
     parser.add_argument("--var", action="append", default=[], metavar="KEY=VALUE", help="Prompt 模板变量，可重复传入")
     parser.add_argument("--stream", action="store_true", help="流式输出")
     parser.add_argument("--list", action="store_true", help="列出所有任务")
@@ -45,7 +46,7 @@ def main():
     if args.eval is not None:
         from harness.eval import evaluate
 
-        result = evaluate(config, args.eval)
+        result = evaluate(config, args.eval, note=args.note)
         print(Path(result["markdown"]).read_text(encoding="utf-8"))
         print(f"明细: {result['jsonl']}")
         return
